@@ -1,0 +1,4 @@
+# Local overrides
+*.local
+.env
+.DS_Store

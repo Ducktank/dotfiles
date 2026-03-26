@@ -1,0 +1,26 @@
+// Dev layout — main editor pane + two utility panes
+// Launch with: zellij --layout dev
+
+layout {
+    // Tab bar at top
+    pane size=1 borderless=true {
+        plugin location="tab-bar"
+    }
+
+    // Main workspace
+    pane split_direction="vertical" {
+        // Left: primary working pane (60% width)
+        pane size="60%"
+
+        // Right: stacked utility panes
+        pane split_direction="horizontal" {
+            pane    // top-right: secondary shell
+            pane    // bottom-right: monitoring/logs
+        }
+    }
+
+    // Status bar at bottom — the keybinding hints live here
+    pane size=2 borderless=true {
+        plugin location="status-bar"
+    }
+}

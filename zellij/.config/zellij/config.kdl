@@ -1,0 +1,33 @@
+// Zellij config — ADHD-optimized for iTerm2
+// Keybinding bar is always visible (the whole point)
+
+// Use 24-bit color (iTerm2 supports it)
+simplified_ui true
+
+// Keep the status bar visible — this is the externalized keybinding display
+// "compact" hides the bar; we want the opposite
+pane_frames true
+
+// Session behavior
+on_force_close "detach"           // Ctrl+Q detaches, doesn't kill
+session_serialization true        // auto-save session layout
+scroll_buffer_size 50000          // generous scrollback
+
+// Mouse support (reduces keybinding dependency)
+mouse_mode true
+
+// Copy on select (reduces steps)
+copy_on_select true
+
+// Theme — high contrast active pane border (same principle as your tmux config)
+theme "catppuccin-mocha"
+
+// Unbind sync (broadcast input) — too easy to fat-finger, catastrophic risk
+keybinds {
+    tab {
+        unbind "s"
+    }
+}
+
+// Default layout
+default_layout "dev"
