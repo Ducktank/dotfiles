@@ -1,7 +1,7 @@
-// Zellij config — ADHD-optimized for iTerm2
-// Keybinding bar is always visible (the whole point)
+// Zellij config — optimized for Ghostty
+// Keybinding bar is always visible (no memorization needed)
 
-// Use 24-bit color (iTerm2 supports it)
+// Clean UI with 24-bit color
 simplified_ui true
 
 // Keep the status bar visible — this is the externalized keybinding display
@@ -19,7 +19,7 @@ mouse_mode true
 // Copy on select (reduces steps)
 copy_on_select true
 
-// Theme — high contrast active pane border (same principle as your tmux config)
+// Theme
 theme "catppuccin-mocha"
 
 // Unbind sync (broadcast input) — too easy to fat-finger, catastrophic risk

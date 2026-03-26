@@ -1,116 +1,108 @@
 # Terminal Environment
 
-A fast, modern terminal setup for macOS using **Ghostty** and **Zellij**.
+A one-command setup for a fast, modern terminal on macOS.
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│  Ghostty + Zellij + Catppuccin Mocha                         │
+│                                                              │
+│  ┌─────────────────────────────┬──────────────────────┐      │
+│  │                             │  $ git status        │      │
+│  │  Main editor / shell        │                      │      │
+│  │  (60% width)                ├──────────────────────┤      │
+│  │                             │  $ npm run dev       │      │
+│  │                             │  Server running...   │      │
+│  └─────────────────────────────┴──────────────────────┘      │
+│  Alt+N new pane  Alt+← → navigate  Alt+H/J/K/L resize       │
+└──────────────────────────────────────────────────────────────┘
+```
 
 ## The Problem
 
-Setting up a good terminal on a new Mac is tedious. You need a fast terminal emulator, a multiplexer for splits and tabs, configs for both, and they need to work well together. Most guides leave you with a dozen tabs open and half-configured tools.
+Setting up a good terminal on a new Mac takes an afternoon. You need a terminal emulator, a multiplexer, configs for both, a decent font, and a theme that doesn't burn your retinas at midnight. Most guides leave you with a dozen browser tabs open and half-configured tools.
 
 ## The Solution
 
-This repo gives you a one-command setup:
+Clone this repo. Run one script. Done.
 
-- **Ghostty** — GPU-accelerated native macOS terminal (fast, beautiful, free)
-- **Zellij** — Modern terminal multiplexer with always-visible keybinding hints (no memorization needed)
-- **Catppuccin Mocha** theme across both tools
-- **Dev layout** — a ready-to-go workspace with an editor pane and two utility panes
+| Component | What It Is |
+|-----------|-----------|
+| [Ghostty](https://ghostty.org) | GPU-accelerated native macOS terminal — fast, beautiful, free |
+| [Zellij](https://zellij.dev) | Terminal multiplexer with always-visible keybinding hints — no memorization |
+| [JetBrains Mono](https://www.jetbrains.com/lp/mono/) | Developer font with ligatures — easy on the eyes |
+| [Catppuccin Mocha](https://catppuccin.com) | Warm dark theme — consistent across both tools |
 
-Everything is managed declaratively: packages in a `Brewfile`, configs symlinked via [GNU Stow](https://www.gnu.org/software/stow/).
+Everything is **declarative**: packages in a `Brewfile`, configs symlinked via [GNU Stow](https://www.gnu.org/software/stow/). No mystery scripts, no hidden state.
+
+---
 
 ## Get Started
 
-### Prerequisites
+> **Requirements:** macOS (Apple Silicon or Intel) and a terminal (use the built-in Terminal.app)
 
-- macOS (Apple Silicon or Intel)
-- Terminal access (use the built-in Terminal.app to bootstrap)
-
-### Step 1: Clone this repo
+### 1. Clone
 
 ```bash
-git clone https://github.com/ryandean/dotfiles ~/dotfiles
+git clone https://github.com/Ducktank/dotfiles ~/dotfiles
 cd ~/dotfiles
 ```
 
-### Step 2: Run the bootstrap script
+### 2. Bootstrap
 
 ```bash
 ./bootstrap.sh
 ```
 
-This will:
-
-1. Install [Homebrew](https://brew.sh) (if you don't have it)
-2. Install Ghostty, Zellij, and Stow from the `Brewfile`
+The script will:
+1. Install [Homebrew](https://brew.sh) if you don't have it
+2. Install Ghostty, Zellij, Stow, and JetBrains Mono from the `Brewfile`
 3. Symlink all configs into `~/.config/`
 4. Verify everything installed correctly
 
-### Step 3: Open Ghostty
+> **Already have configs?** No problem — the script uses `--adopt`, which absorbs your existing files into this repo. Run `git diff` afterward to see what changed.
 
-Launch **Ghostty** from `/Applications` or Spotlight (`Cmd+Space` → "Ghostty").
+### 3. Launch
 
-### Step 4: Start Zellij
+Open **Ghostty** from Spotlight (`Cmd+Space` → type "Ghostty") or `/Applications`.
 
-```bash
-zellij
-```
+Zellij starts with the dev layout automatically — a main pane on the left (60%) and two utility panes stacked on the right.
 
-Or use the included dev layout (main pane + two utility panes):
+**That's it. You're done.**
 
-```bash
-zellij --layout dev
-```
+---
 
-That's it. You're done.
-
-## What's Included
+## What's Inside
 
 ```
 dotfiles/
-├── Brewfile                          # Packages to install
-├── bootstrap.sh                      # One-command setup
-├── ghostty/.config/ghostty/config    # Ghostty settings
+├── Brewfile                          # Packages: Ghostty, Zellij, Stow, JetBrains Mono
+├── bootstrap.sh                      # One-command setup script
+├── ghostty/.config/ghostty/config    # Ghostty terminal settings
 └── zellij/.config/zellij/
-    ├── config.kdl                    # Zellij settings
+    ├── config.kdl                    # Zellij multiplexer settings
     └── layouts/dev.kdl               # Dev workspace layout
 ```
 
 ## Customizing
 
-Edit the config files in this repo, then re-run Stow to update the symlinks:
+Edit configs in this repo, then re-link:
 
 ```bash
 cd ~/dotfiles
 stow -R ghostty zellij
 ```
 
-### Change the font
-
-Edit `ghostty/.config/ghostty/config`:
-
+**Change the font** — edit `ghostty/.config/ghostty/config`:
 ```
-font-family = Your Font Name
-font-size = 14
+font-family = Fira Code
+font-size = 15
 ```
 
-### Change the theme
-
-Both tools use `catppuccin-mocha` by default. To change:
-
-- Ghostty: edit `theme =` in `ghostty/.config/ghostty/config`
-- Zellij: edit `theme` in `zellij/.config/zellij/config.kdl`
-
-## Uninstalling
-
-Remove the symlinks without deleting the repo:
-
-```bash
-cd ~/dotfiles
-stow -D ghostty zellij
-```
+**Change the theme** — update both files to stay consistent:
+- `ghostty/.config/ghostty/config` → `theme = catppuccin-latte`
+- `zellij/.config/zellij/config.kdl` → `theme "catppuccin-latte"`
 
 ## Updating
-
-Pull the latest and re-stow:
 
 ```bash
 cd ~/dotfiles
@@ -118,3 +110,18 @@ git pull
 brew bundle
 stow -R ghostty zellij
 ```
+
+## Uninstalling
+
+```bash
+cd ~/dotfiles
+stow -D ghostty zellij
+```
+
+This removes the symlinks. Your configs disappear from `~/.config/` but stay safe in this repo.
+
+---
+
+## License
+
+[MIT](LICENSE) — do whatever you want with it.

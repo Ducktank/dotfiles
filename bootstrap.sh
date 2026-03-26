@@ -14,9 +14,11 @@ if ! command -v brew &>/dev/null; then
     echo "==> Installing Homebrew..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-    # Add Homebrew to PATH for this session (Apple Silicon)
+    # Add Homebrew to PATH for this session
     if [[ -f /opt/homebrew/bin/brew ]]; then
-        eval "$(/opt/homebrew/bin/brew shellenv)"
+        eval "$(/opt/homebrew/bin/brew shellenv)"    # Apple Silicon
+    elif [[ -f /usr/local/bin/brew ]]; then
+        eval "$(/usr/local/bin/brew shellenv)"       # Intel
     fi
 else
     echo "==> Homebrew already installed"
@@ -27,10 +29,12 @@ echo "==> Installing packages (Ghostty, Zellij, Stow)..."
 brew bundle --file="$DOTFILES_DIR/Brewfile"
 
 # Step 3: Stow configs into ~/.config
+# --adopt: if configs already exist, absorb them into the dotfiles tree
+#          (you can then `git diff` to see what changed)
 echo "==> Linking configs..."
 cd "$DOTFILES_DIR"
-stow -v --target="$HOME" ghostty
-stow -v --target="$HOME" zellij
+stow -v --adopt --target="$HOME" ghostty
+stow -v --adopt --target="$HOME" zellij
 
 # Step 4: Verify
 echo ""
@@ -53,17 +57,24 @@ else
     OK=false
 fi
 
-if [[ -L "$HOME/.config/ghostty/config" ]]; then
+if [[ -f "$HOME/.config/ghostty/config" ]]; then
     echo "  ✓ Ghostty config linked"
 else
     echo "  ✗ Ghostty config not linked"
     OK=false
 fi
 
-if [[ -L "$HOME/.config/zellij/config.kdl" ]]; then
+if [[ -f "$HOME/.config/zellij/config.kdl" ]]; then
     echo "  ✓ Zellij config linked"
 else
     echo "  ✗ Zellij config not linked"
+    OK=false
+fi
+
+if [[ -f "$HOME/.config/zellij/layouts/dev.kdl" ]]; then
+    echo "  ✓ Zellij dev layout linked"
+else
+    echo "  ✗ Zellij dev layout not linked"
     OK=false
 fi
 
