@@ -35,6 +35,7 @@ echo "==> Linking configs..."
 cd "$DOTFILES_DIR"
 stow -v --adopt --target="$HOME" ghostty
 stow -v --adopt --target="$HOME" zellij
+stow -v --adopt --target="$HOME" claude
 
 # Step 4: Verify
 echo ""
@@ -75,6 +76,13 @@ if [[ -f "$HOME/.config/zellij/layouts/dev.kdl" ]]; then
     echo "  ✓ Zellij dev layout linked"
 else
     echo "  ✗ Zellij dev layout not linked"
+    OK=false
+fi
+
+if [[ -L "$HOME/code/CLAUDE.md" ]]; then
+    echo "  ✓ Workspace CLAUDE.md linked"
+else
+    echo "  ✗ Workspace CLAUDE.md not linked"
     OK=false
 fi
 

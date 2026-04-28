@@ -78,9 +78,10 @@ dotfiles/
 ├── Brewfile                          # Packages: Ghostty, Zellij, Stow, JetBrains Mono
 ├── bootstrap.sh                      # One-command setup script
 ├── ghostty/.config/ghostty/config    # Ghostty terminal settings
-└── zellij/.config/zellij/
-    ├── config.kdl                    # Zellij multiplexer settings
-    └── layouts/dev.kdl               # Dev workspace layout
+├── zellij/.config/zellij/
+│   ├── config.kdl                    # Zellij multiplexer settings
+│   └── layouts/dev.kdl               # Dev workspace layout
+└── claude/code/CLAUDE.md             # Workspace-root project guide loaded by Claude Code
 ```
 
 ## Customizing
@@ -89,7 +90,7 @@ Edit configs in this repo, then re-link:
 
 ```bash
 cd ~/dotfiles
-stow -R ghostty zellij
+stow -R ghostty zellij claude
 ```
 
 **Change the font** — edit `ghostty/.config/ghostty/config`:
