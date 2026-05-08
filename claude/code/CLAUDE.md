@@ -144,6 +144,9 @@ Workspace root for MemoryForge, LLC — an app studio and AI consulting practice
 - The `active/` symlinks are for human navigation only — never reference them in skill paths or automation scripts.
 - **Auto-memory directory is keyed off cwd at session start.** Sessions started from a symlink path (`~/code/work-assistant/`) write to a *different* memory dir than sessions started from the canonical path (`~/code/claude/work-assistant/`). Memories don't cross over. Always start sessions from the canonical path.
 - **Slash command install convention**: prefer symlinks (`ln -s`) over copies when installing commands to `~/.claude/commands/`. Symlinks auto-track upstream changes; copies silently drift. Exception: `claude-secret-sauce/SETUP.md` prescribes copy — document any future exceptions in the package's own SETUP.md.
+- **Symlinks only at `~/.claude/skills/`** — never install skills as real directories there; use `ln -s <canonical-path> ~/.claude/skills/<name>`. Real-dir installs create a third copy that drifts silently from the canonical repo. (See `markdown-vault/skills/2026-05-07-skill-drift-patterns.md` for the cleanup that surfaced this.)
+- **Project-local skills are intentionally scoped.** Skills in `<project>/.claude/skills/` load only when cwd is inside that project. Do NOT duplicate them in `claude-skills/` — it is cargo-cult and causes drift. Canonical taxonomy: `claude-skills/` = general-purpose, `<project>/.claude/skills/` = project-local, `mica-skills/` = MICA-specific.
+- **Skill drift check:** `~/code/claude/claude-skills/scripts/check-drift.sh --quiet` — exit 1 if any skill has divergent copies across canonical homes. Run periodically or after skill edits.
 
 ## ADHD Interaction Patterns
 
