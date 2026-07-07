@@ -40,6 +40,7 @@ Workspace root for MemoryForge, LLC — an app studio and AI consulting practice
 | `bridges-dashboard` | `active/bridges-dashboard` (local) |
 | `claude-secret-sauce` | `claude/claude-secret-sauce` |
 | `keyrus-hardware-request` | `active/keyrus-hardware-request` (local) |
+| `keyrus-internal` | `business/pm/projects/keyrus-internal` |
 | `lawn-care-network` | `ideas/lawn-care-network` |
 | `markdown-vault` | `business/markdown-vault` |
 | `mica` | `services/mpa` |
@@ -47,6 +48,7 @@ Workspace root for MemoryForge, LLC — an app studio and AI consulting practice
 | `shore-ai` | `sites/shore-ai` |
 | `tasks` | `business/tasks` |
 | `work-assistant` | `claude/work-assistant` |
+| `zimvie` | `business/pm/projects/zimvie` |
 
 ### apps/ — Products
 
@@ -57,6 +59,7 @@ Workspace root for MemoryForge, LLC — an app studio and AI consulting practice
 | `fishframe-web/` | FishFrame marketing site | HTML/CSS, Vercel |
 | `fishframe-worktrees/` | Git worktrees for fishframe/ (not a separate project) | — |
 | `ios-screenshot-maker/` | App Store screenshot generator for multiple devices | SwiftUI, AppKit, macOS 14+ |
+| `whatcha-say/` | YouTube transcript → structured markdown CLI with local/cloud LLM analysis | Bash, bats, yt-dlp |
 
 ### claude/ — Claude Code Ecosystem
 
@@ -69,6 +72,7 @@ Workspace root for MemoryForge, LLC — an app studio and AI consulting practice
 | `claude-api-training/` | Hands-on Claude API training curriculum | Python, Claude API, SQLite |
 | `claude-learning-system/` | Meta-framework for capturing session learnings into CLAUDE.md | Python, Bash |
 | `claude-migration-20260710/` | Claude Code config migration tooling | Python, Bash |
+| `digital-librarian/` | Digital librarian — "where is X?" card catalog (`/librarian find`) + nightly workspace custodian scans | Bash, Python, launchd, Claude Code skill |
 | `senior-pm-advisor/` | Claude Code skill for PM advisor role | SKILL.md |
 
 ### services/ — Backend Services & Migration
@@ -79,8 +83,18 @@ Workspace root for MemoryForge, LLC — an app studio and AI consulting practice
 | `tableau-migration-factory/` | Migration factory automation | Python |
 | `tableau-sanitizer/` | Workbook sanitization — strips credentials from .twb/.twbx | Python 3.12, FastAPI, lxml, K8s, S3 |
 | `pii-anonymizer/` | HIPAA/GDPR PII/PHI anonymization for LLM queries | Python, Presidio, FastAPI, SQLite, spaCy |
-| `cognos-tableau-rfp-toolkit/` | Cognos-to-Tableau migration proposal toolkit | Markdown |
+| `cognos-tableau-rfp-toolkit/` | Cognos-to-Tableau migration proposal toolkit | Node.js |
 | `mpa/` | Massport MECA project management | — |
+
+**BI Migration Factory product line — canonical repos** (consolidated 2026-07-06, plan: `markdown-vault/planning/BI-Migration-Factory-Planning.md`; stale copies archived to `_archive/bi-migration-consolidation-2026-07/`):
+
+| Product | Canonical repo | Notes |
+| --- | --- | --- |
+| Doc-gen | `apps/twbx-doc-gen` (dev) → `apps/twbx-doc-gen-prod` (release mirror) | copies in `ideas/` and `Downloads/` archived |
+| Migration engine | `services/tableau-migration-platform` | memoryforge_website's engine copies archived |
+| Marketing site / funnel | `services/tableau-migration-factory` | sole owner of marketing HTML as of M1 |
+| Sanitizer | `services/tableau-sanitizer` | |
+| Assessment core (planned) | `services/bi-core` | design: `markdown-vault/planning/BI-Core-Design-Notes.md` |
 
 ### sites/ — Websites
 
@@ -110,6 +124,7 @@ Workspace root for MemoryForge, LLC — an app studio and AI consulting practice
 | `markdown-vault/` | Personal Obsidian knowledge vault | Markdown |
 | `resumes/` | Resume and cover letter collection | PDF, DOCX, Markdown |
 | `tasks/` | ADHD task system with audio parsing and meeting schema | Python, Bash |
+| `drive-backup/` | rsync backup scripts for external drives (T7, SD cards) — moved from `~/scripts` 2026-07-03 | Bash, launchd |
 | `work/` | Work-related audio transcriptions and data files | M4A, JSON, VTT |
 | `docs/` | General documentation | Markdown |
 | `backups/` | Backup files | — |
@@ -183,7 +198,7 @@ These rules apply to ALL interactions, not just when GTD skills are invoked.
 
 ## Engineering Standards (Global)
 
-- **Every CLI tool must support `--dry-run`.** Parse and validate input, show what would happen, skip writing. If a command doesn't have `--dry-run`, it's not done.
+- **Every CLI tool must support `--dry-run`.** Parse and validate input, show what would happen, skip writing. If a command doesn't have `--dry-run`, it's not done. For destructive bulk operations (rename/move/delete across many files), before applying present: (1) head of the operation list, (2) the full skip/exclude list, (3) summary counts — and apply only after user confirmation. Write a rollback map (new↔old) on apply.
 - **All bash operations go through `.sh` scripts (service layer).** No direct Bash tool calls — write the script, run the script. No exceptions for read-only commands. Scripts are the auditable, repeatable interface to the shell.
 - **JSON-manipulation one-offs: bash outer shell + embedded `python3 - args << 'PYEOF'` heredoc.** Bash handles arg parsing, backup, process management, and assertions. Python handles the JSON walk/rewrite. Single file, no extra deps, no separate Python module to track, CLAUDE.md service-layer compliant. (Pattern origin: 2026-05-07 `_scratch/reorganize-edge-favorites.sh` — Edge bookmarks restructure with --dry-run, auto-quit, timestamped backup, URL-count assertion.)
 - **Full SOP:** `ideas/docs/sop-coding-best-practices.md` — CAB-approved, 12 sections, quarterly review.
@@ -195,6 +210,7 @@ These rules apply to ALL interactions, not just when GTD skills are invoked.
 - **Silent-failure detection in legacy formulas.** When migrating or analyzing a legacy calculated field or large IF/ELSEIF chain, scan explicitly for: leading/trailing whitespace in string literals (e.g., `' SMGH'` vs `'SMGH'`), duplicate keys with conflicting return values (first match wins, second branch is dead code with intent ambiguity), first-branch shadow on a different field that overrides downstream classification, and missing ELSE/default clauses (unmatched inputs return NULL silently). These are not caught by row counts, sum totals, or column-level statistics — they require explicit row-by-row inspection.
 - **CAB refinement single-pass convergence.** When invoking `/cab-refine`, write remediations to be specific (replace exact tokens, not "fix the budget"), pass/fail-able (smoke test passes when X, Y, Z), and verifiable post-edit (grep, math sweep, render check). Surgical remediation enables CONDITIONAL → APPROVED in a single iteration; vague remediation forces multiple passes.
 - **Effort estimates for ambiguous-scope external requests.** When writing a plan for PM/closeout work where scope depends on a requester's clarifying answers, use best/likely/worst-case framing with task-level breakdown rather than a single number. Single-number estimates are either alarmist (worst case) or overconfident (best case). The three-scenario framing earns its keep when one stage of the process resolves it; collapse to a single confirmed number once verification is complete. (Pattern origin: 2026-05-07 Snowflake password-deprecation triage — pre-verification range 2–24 hrs → post-verification reality 2.25 hrs.)
+- **PBI terminology audit for Tableau → Power BI migration SOWs.** Before any such document is shared externally, audit all instances of "dashboard" and replace with the correct PBI term: Tableau workbook → PBI report; Tableau dashboard/view → PBI report page (or report). "Dashboard" in Power BI is a distinct artifact — a single pinned-tile canvas — and must never be used as a synonym for a migrated Tableau view. PBI-fluent client stakeholders will flag the mismatch immediately. (Pattern surfaced 2026-06-12: Kenny Edwards, Temple client, corrected the term on first review.)
 
 ## Working With This Structure
 
