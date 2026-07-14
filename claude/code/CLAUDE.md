@@ -23,6 +23,7 @@ Workspace root for MemoryForge, LLC — an app studio and AI consulting practice
 ├── docs/             → cross-project session notes & superpowers plans
 ├── scripts/          → workspace-level utility scripts (non-git)
 ├── my-video/         → personal video project (own git repo)
+├── terminal-sessions/→ timestamped per-session work dirs + `cs` shell function (own git repo)
 ├── work-assistant    → symlink → claude/work-assistant
 ├── markdown-vault    → symlink → business/markdown-vault
 ├── idea-factory      → symlink → ideas/idea-factory
@@ -80,7 +81,7 @@ Workspace root for MemoryForge, LLC — an app studio and AI consulting practice
 | Project | What It Is | Stack |
 | --- | --- | --- |
 | `tableau-migration-platform/` | Enterprise Tableau Server→Cloud migration engine with N8N and monitoring | Python, FastAPI, TypeScript, PostgreSQL, Docker, K8s |
-| `tableau-migration-factory/` | Migration factory automation | Python |
+| `tableau-migration-website/` | Migration marketing site / lead-gen funnel (HTML + `api/assessment.js`) — renamed from `tableau-migration-factory` 2026-07-08 | Node.js, HTML/CSS/JS, Vercel |
 | `tableau-sanitizer/` | Workbook sanitization — strips credentials from .twb/.twbx | Python 3.12, FastAPI, lxml, K8s, S3 |
 | `pii-anonymizer/` | HIPAA/GDPR PII/PHI anonymization for LLM queries | Python, Presidio, FastAPI, SQLite, spaCy |
 | `cognos-tableau-rfp-toolkit/` | Cognos-to-Tableau migration proposal toolkit | Node.js |
@@ -92,7 +93,7 @@ Workspace root for MemoryForge, LLC — an app studio and AI consulting practice
 | --- | --- | --- |
 | Doc-gen | `apps/twbx-doc-gen` (dev) → `apps/twbx-doc-gen-prod` (release mirror) | copies in `ideas/` and `Downloads/` archived |
 | Migration engine | `services/tableau-migration-platform` | memoryforge_website's engine copies archived |
-| Marketing site / funnel | `services/tableau-migration-factory` | sole owner of marketing HTML as of M1 |
+| Marketing site / funnel | `services/tableau-migration-website` | sole owner of marketing HTML as of M1 (dir renamed from `tableau-migration-factory` 2026-07-08) |
 | Sanitizer | `services/tableau-sanitizer` | |
 | Assessment core (planned) | `services/bi-core` | design: `markdown-vault/planning/BI-Core-Design-Notes.md` |
 
@@ -138,6 +139,7 @@ Workspace root for MemoryForge, LLC — an app studio and AI consulting practice
 | Project | What It Is |
 | --- | --- |
 | `ideas/` | Per-idea subdirs + `inbox/` captures; WIP ideas, experiments, planning docs |
+| `terminal-sessions/` | Timestamped per-session work dirs plus the `cs` shell function; own git repo |
 | `_archive/` | Archived/stale projects |
 | `_scratch/` | Temporary working directory |
 
